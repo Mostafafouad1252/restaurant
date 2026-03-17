@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Cart – Restaurant{% endblock %}
+{% block content %}
+<h1 class="text-3xl md:text-4xl font-bold mb-6">Shopping Cart</h1>
+<div id="cartContainer" class="max-w-3xl">
+    <div id="cartLoading" class="text-center py-8 text-stone-500" style="font-size: 1rem;">Loading cart…</div>
+    <div id="cartContent" class="hidden">
+        <div class="card overflow-hidden">
+            <ul id="cartItems" class="divide-y divide-stone-200 dark:divide-stone-700"></ul>
+            <div class="p-4 bg-stone-50 dark:bg-stone-800/50 flex justify-between items-center">
+                <span class="text-lg font-semibold">Total</span>
+                <span id="cartTotal" class="text-xl font-bold text-primary-600 dark:text-primary-400">$0.00</span>
+            </div>
+        </div>
+        <div class="mt-4 flex flex-wrap gap-4">
+            <a href="{{ url_for('show_menu') }}" class="btn-secondary">Continue Shopping</a>
+            <a href="{{ url_for('checkout') }}" id="checkoutBtn" class="btn-primary">Proceed to Checkout</a>
+        </div>
+    </div>
+    <div id="cartEmpty" class="hidden text-center py-12">
+        <p class="text-stone-500 dark:text-stone-400 mb-4" style="font-size: 1.0625rem;">Your cart is empty.</p>
+        <a href="{{ url_for('show_menu') }}" class="btn-primary">View Menu</a>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/cart.js') }}"></script>
+{% endblock %}

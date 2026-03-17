@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Register – Restaurant{% endblock %}
+{% block content %}
+<div class="max-w-md mx-auto">
+    <h1 class="text-3xl md:text-4xl font-bold mb-6">Register</h1>
+    <form method="post" action="{{ url_for('register') }}" class="card p-6 space-y-4">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div>
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required class="w-full" placeholder="johndoe">
+        </div>
+        <div>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required class="w-full" placeholder="you@example.com">
+        </div>
+        <div>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required class="w-full" minlength="6">
+        </div>
+        <button type="submit" class="btn-primary w-full">Register</button>
+    </form>
+    <p class="mt-4 text-center text-stone-600 dark:text-stone-400" style="font-size: 1rem;">Already have an account? <a href="{{ url_for('login') }}" class="text-primary-600 dark:text-primary-400 font-medium">Login</a></p>
+</div>
+{% endblock %}

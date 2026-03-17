@@ -1,0 +1,39 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Analytics{% endblock %}
+{% block content %}
+<h1 class="text-3xl font-bold mb-6">Best-Selling Meals</h1>
+<div class="card p-6 max-w-2xl">
+    <canvas id="analyticsChart" width="400" height="200"></canvas>
+</div>
+<p class="mt-4 text-stone-500 dark:text-stone-400 text-sm">Top 10 meals by quantity ordered.</p>
+{% endblock %}
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+(function () {
+  var labels = {{ labels | tojson }};
+  var data = {{ data | tojson }};
+  var ctx = document.getElementById('analyticsChart');
+  if (!ctx) return;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Quantity sold',
+        data: data,
+        backgroundColor: 'rgba(234, 118, 32, 0.7)',
+        borderColor: 'rgb(234, 118, 32)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Reservations – Restaurant{% endblock %}
+{% block content %}
+<h1 class="text-3xl md:text-4xl font-bold mb-6">Reserve a Table</h1>
+<div class="grid md:grid-cols-2 gap-8 max-w-4xl">
+    <div class="card p-6">
+        <form method="post" action="{{ url_for('reservations') }}" class="space-y-4">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() if csrf_token else '' }}">
+            <div>
+                <label for="date">Date *</label>
+                <input type="date" id="date" name="date" required class="w-full input-date-clear" min="{{ today or '' }}">
+            </div>
+            <div>
+                <label for="time">Time *</label>
+                <input type="time" id="time" name="time" required class="w-full input-date-clear" value="19:00">
+            </div>
+            <div>
+                <label for="num_people">Number of people *</label>
+                <input type="number" id="num_people" name="num_people" required min="1" max="20" class="w-full" value="2">
+            </div>
+            <div>
+                <label for="guest_name">Your name *</label>
+                <input type="text" id="guest_name" name="guest_name" required class="w-full" value="{{ current_user.username if current_user.is_authenticated else '' }}">
+            </div>
+            <div>
+                <label for="guest_phone">Phone *</label>
+                <input type="tel" id="guest_phone" name="guest_phone" required class="w-full" placeholder="+1 234 567 8900">
+            </div>
+            <button type="submit" class="btn-primary w-full">Submit Reservation</button>
+        </form>
+    </div>
+    <div>
+        <p class="text-stone-600 dark:text-stone-400">Reserve a table by choosing the date, time, and number of guests. We’ll confirm by phone if needed.</p>
+    </div>
+</div>
+{% endblock %}

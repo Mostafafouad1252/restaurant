@@ -1,0 +1,44 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Meals{% endblock %}
+{% block content %}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold">Meals (CRUD)</h1>
+    <a href="{{ url_for('admin_meal_create') }}" class="btn-primary">Add Meal</a>
+</div>
+<div class="card overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-left">
+            <thead class="bg-stone-100 dark:bg-stone-800">
+                <tr>
+                    <th class="p-3">Image</th>
+                    <th class="p-3">Name</th>
+                    <th class="p-3">Category</th>
+                    <th class="p-3">Price</th>
+                    <th class="p-3">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-stone-200 dark:divide-stone-700">
+                {% for meal in meals %}
+                <tr>
+                    <td class="p-3">
+                        <img src="{{ meal.image_url or '/static/images/meals/default.svg' }}" alt="" class="w-12 h-12 object-cover rounded" onerror="this.src='/static/images/meals/default.svg'">
+                    </td>
+                    <td class="p-3 font-medium">{{ meal.name }}</td>
+                    <td class="p-3 capitalize">{{ meal.category }}</td>
+                    <td class="p-3">${{ "%.2f"|format(meal.price) }}</td>
+                    <td class="p-3">
+                        <a href="{{ url_for('admin_meal_edit', meal_id=meal.id) }}" class="text-primary-600 dark:text-primary-400 font-medium mr-2">Edit</a>
+                        <form method="post" action="{{ url_for('admin_meal_delete', meal_id=meal.id) }}" class="inline" onsubmit="return confirm('Delete this meal?');">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="text-red-600 dark:text-red-400 font-medium">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="5" class="p-6 text-center text-stone-500">No meals yet. <a href="{{ url_for('admin_meal_create') }}" class="text-primary-600">Add one</a>.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

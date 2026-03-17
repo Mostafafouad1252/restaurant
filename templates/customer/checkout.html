@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Checkout – Restaurant{% endblock %}
+{% block content %}
+<h1 class="text-3xl md:text-4xl font-bold mb-6">Checkout</h1>
+<div class="max-w-md">
+    <form method="post" action="{{ url_for('checkout') }}" class="card p-6 space-y-4">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() if csrf_token else '' }}">
+        <div>
+            <label for="guest_name">Your name *</label>
+            <input type="text" id="guest_name" name="guest_name" required class="w-full" value="{{ current_user.username if current_user.is_authenticated else '' }}" placeholder="Full name">
+        </div>
+        <div>
+            <label for="guest_phone">Phone *</label>
+            <input type="tel" id="guest_phone" name="guest_phone" required class="w-full" placeholder="e.g. +1 234 567 8900">
+        </div>
+        <p class="text-stone-500 dark:text-stone-400" style="font-size: 1rem;">We will use this to contact you about your order.</p>
+        <button type="submit" class="btn-primary w-full">Place Order</button>
+    </form>
+    <p class="mt-4"><a href="{{ url_for('cart_page') }}" class="text-primary-600 dark:text-primary-400">← Back to cart</a></p>
+</div>
+{% endblock %}

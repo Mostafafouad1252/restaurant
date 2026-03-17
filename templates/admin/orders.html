@@ -1,0 +1,73 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Orders{% endblock %}
+{% block content %}
+<h1 class="text-3xl font-bold mb-6">Incoming Orders</h1>
+<div class="card overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-left">
+            <thead class="bg-stone-100 dark:bg-stone-800">
+                <tr>
+                    <th class="p-3">ID</th>
+                    <th class="p-3">Guest / User</th>
+                    <th class="p-3">Total</th>
+                    <th class="p-3">Status</th>
+                    <th class="p-3">Created</th>
+                    <th class="p-3">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-stone-200 dark:divide-stone-700">
+                {% for order in orders %}
+                <tr data-order-id="{{ order.id }}">
+                    <td class="p-3 font-mono">#{{ order.id }}</td>
+                    <td class="p-3">{{ order.guest_name or (order.user.username if order.user else '—') }}</td>
+                    <td class="p-3">${{ "%.2f"|format(order.total_price) }}</td>
+                    <td class="p-3">
+                        <span class="order-status font-medium">{{ order.status }}</span>
+                    </td>
+                    <td class="p-3 text-sm text-stone-500">{{ order.created_at.strftime('%Y-%m-%d %H:%M') if order.created_at else '—' }}</td>
+                    <td class="p-3">
+                        <select class="order-status-select border rounded px-2 py-1 text-sm" data-order-id="{{ order.id }}">
+                            <option value="New" {{ 'selected' if order.status == 'New' }}>New</option>
+                            <option value="In Preparation" {{ 'selected' if order.status == 'In Preparation' }}>In Preparation</option>
+                            <option value="Delivered" {{ 'selected' if order.status == 'Delivered' }}>Delivered</option>
+                        </select>
+                    </td>
+                </tr>
+                {% for item in order.items %}
+                <tr class="bg-stone-50 dark:bg-stone-800/50">
+                    <td class="p-3"></td>
+                    <td class="p-3 text-sm" colspan="2">{{ item.meal.name }} × {{ item.quantity }}</td>
+                    <td class="p-3 text-sm" colspan="3">${{ "%.2f"|format(item.meal.price * item.quantity) }}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr><td colspan="6" class="p-6 text-center text-stone-500">No orders yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+document.querySelectorAll('.order-status-select').forEach(function (sel) {
+  sel.addEventListener('change', function () {
+    var id = parseInt(sel.getAttribute('data-order-id'), 10);
+    var status = sel.value;
+    fetch('/api/admin/order/' + id + '/status', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+      body: JSON.stringify({ status: status })
+    })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      if (data.success) {
+        var row = sel.closest('tr');
+        var statusEl = row.querySelector('.order-status');
+        if (statusEl) statusEl.textContent = data.status;
+      }
+    });
+  });
+});
+</script>
+{% endblock %}
