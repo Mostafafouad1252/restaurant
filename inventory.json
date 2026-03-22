@@ -1,0 +1,28 @@
+{
+  "cars": [
+    {
+      "id": "1",
+      "type": "marcedec",
+      "color": "white",
+      "price": 10000000
+    },
+    {
+      "id": "2",
+      "type": "SUV",
+      "color": "Black",
+      "price": 450000
+    },
+    {
+      "id": "3",
+      "type": "Nissan",
+      "color": "green",
+      "price": 700000
+    },
+    {
+      "id": "4",
+      "type": "Marcedec C200",
+      "color": "Red",
+      "price": 2000000
+    }
+  ]
+}
